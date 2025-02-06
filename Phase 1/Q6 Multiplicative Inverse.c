@@ -1,45 +1,41 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<gmp.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <gmp.h>
 
-void main(int argc,char *argv[])
-{
-	mpz_t gcd;
-	mpz_init(gcd);
+int main(int argc, char *argv[]) {
+    // Initialize variables to store gcd, input number (a), and modulus (m)
+    mpz_t gcd, a, m, inverse, temp;
+    mpz_init(gcd);
+    mpz_init_set_ui(a, atoi(argv[1])); // a (number)
+    mpz_init_set_ui(m, atoi(argv[2])); // m (modulus)
+    mpz_init(inverse);
+    mpz_init(temp);
 
-	mpz_t num;
-	mpz_init_set_ui(num,atoi(argv[1]));
+    // Compute gcd(a, m) and find modular inverse using Extended Euclidean Algorithm
+    mpz_gcdext(gcd, inverse, temp, a, m);
 
-	mpz_t mod_val;
-	mpz_init_set_ui(mod_val,atoi(argv[2]));
+    // Check if the multiplicative inverse exists (gcd(a, m) must be 1)
+    if (mpz_cmp_ui(gcd, 1) == 0) {
+        // Ensure the inverse is positive (modular inverse should be within [0, m-1])
+        if (mpz_sgn(inverse) < 0) {
+            mpz_add(inverse, inverse, m);
+        }
 
-	/* void mpz_gcdext (mpz t g, mpz t s, mpz t t, const mpz t a, const mpz t b) [Function]
-	 * Set g to the greatest common divisor of a and b, and in addition set s and t to coefficients
-	 * satisfying as + bt = g. The value in g is always positive, even if one or both of a and b
-	 * are negative (or zero if both inputs are zero). The values in s and t are chosen such that
-	 * normally, |s| < |b|/(2g) and |t| < |a|/(2g), and these relations define s and t uniquely. There
-	 * are a few exceptional cases:
-	 * If |a| = |b|, then s = 0, t = sgn(b).
-	 * Otherwise, s = sgn(a) if b = 0 or |b| = 2g, and t = sgn(b) if a = 0 or |a| = 2g.
-	 * In all cases, s = 0 if and only if g = |b|, i.e., if b divides a or a = b = 0.
-	 * If t or g is NULL then that value is not computed. */
+        // Print result
+        printf("Multiplicative inverse exists.\n");
+        printf("The multiplicative inverse of %ld (mod %ld) is %ld (mod %ld)\n",
+               mpz_get_ui(a), mpz_get_ui(m), mpz_get_ui(inverse), mpz_get_ui(m));
+    } else {
+        printf("Multiplicative inverse does not exist! (gcd(%ld, %ld) = %ld)\n",
+               mpz_get_ui(a), mpz_get_ui(m), mpz_get_ui(gcd));
+    }
 
+    // Free allocated memory
+    mpz_clear(gcd);
+    mpz_clear(a);
+    mpz_clear(m);
+    mpz_clear(inverse);
+    mpz_clear(temp);
 
-	// Calculate the gcd(num,mod_val)
-	
-	mpz_t s,t;
-	mpz_inits(s,t,NULL);
-
-	mpz_gcdext(gcd,s,t,num,mod_val);
-		
-	printf("%ld %ld\n",mpz_get_ui(s),mpz_get_ui(t));
-	if(mpz_cmp_ui(gcd,1)<=0)
-	{
-		printf("The multiplicative inverse of %ld (mod %ld) is %ld (mod %ld)\n",mpz_get_ui(num),mpz_get_ui(mod_val),mpz_get_ui(s),mpz_get_ui(mod_val));	      }
-	else
-	{
-		printf("The multiplicative inverse does not exist!\n");
-	}
+    return 0;
 }
-
-
