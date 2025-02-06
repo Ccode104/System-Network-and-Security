@@ -1,4 +1,4 @@
-# Number Theory Questions
+# Number Theory Questions (Extracted from the SNS_Practical_Phase1 docx file)
 
 ## 1. Common Divisors
 Given `n` integers \( \{m_i\}_{i=1}^{n} \), print all common divisors of \( (m_1, m_2, \dots, m_n) \) in ascending order.
