@@ -119,7 +119,7 @@ void makeMatrix(char *key,char key_matrix[5][5])
 			//mpz_set(key_matrix[row][col],key_hash);
 
 			key_matrix[row][col] = key[index];
-			printf("%c",key[index]);
+			//printf("%c",key[index]);
 			row ++;
 			col ++;
 			index++;
@@ -144,7 +144,7 @@ void makeMatrix(char *key,char key_matrix[5][5])
 			//hash(key[index],key_hash);
 			//mpz_set(key_matrix[row][col],key_hash);
 			key_matrix[row][col] = key[index];
-			printf("%c",key[index]);
+			//printf("%c",key[index]);
 			row ++;
 			col ++;
 			index++;
@@ -162,6 +162,8 @@ void makeMatrix(char *key,char key_matrix[5][5])
 
 void find(char c,mpz_t row,mpz_t col,char key_matrix[5][5])
 {
+	if(c=='j')
+		c='i';
 	for (int i = 0; i < 5; ++i)
 	{
 		//printf("\n");
@@ -193,7 +195,7 @@ void encrypt(char *plaintext,char*ciphertext,char* key)
 	{
 		hash(plaintext[i],plaintext_hash);
 		alphabets[mpz_get_ui(plaintext_hash)] = 1;
-		printf(" %d ",mpz_get_ui(plaintext_hash));
+		//printf(" %d ",mpz_get_ui(plaintext_hash));
 	}
 
 	if((alphabets[19]==1)||(alphabets[20]==1))
@@ -223,7 +225,7 @@ void encrypt(char *plaintext,char*ciphertext,char* key)
 	{
 		for(int i = 0;i < strlen(plaintext_copy) - 1;i = i + 2)
 		{
-			printf("\n Plaintext = %s",plaintext);
+			printf("\n 1Plaintext = %s",plaintext);
 			if((plaintext_copy[i] == plaintext_copy[i+1])||(plaintext_copy[i]=='i' && plaintext_copy[i+1] == 'j')||(plaintext_copy[i]=='j' && plaintext_copy[i+1] == 'i'))
 			{
 				// Add bogus in between
@@ -239,7 +241,7 @@ void encrypt(char *plaintext,char*ciphertext,char* key)
 				plaintext[d+1] = plaintext_copy[i+1];
 				d=d+2;
 			}
-
+			//plaintext[d] ='\0';
 		}
 		plaintext[d] ='\0';
 	}
@@ -264,8 +266,10 @@ void encrypt(char *plaintext,char*ciphertext,char* key)
 			}
 
 		}
+		plaintext[d] =plaintext_copy[strlen(plaintext_copy)-1];
 		plaintext[d+1] ='\0';
 	}
+	printf("\n Plaintext = %s",plaintext);
 
 	
 
@@ -317,34 +321,50 @@ void encrypt(char *plaintext,char*ciphertext,char* key)
 
 		if(mpz_cmp(row1,row2)==0)
 		{
-			mpz_add_ui(col1,col1,1);
-			mpz_mod_ui(col1,col1,5);
-			mpz_add_ui(col2,col2,1);
-			mpz_mod_ui(col2,col2,5);
+			if(mpz_cmp(col1,col2)<0)
+			{
+				mpz_add_ui(col1,col1,1);
+				mpz_mod_ui(col1,col1,5);
+				mpz_add_ui(col2,col2,1);
+				mpz_mod_ui(col2,col2,5);
+			}
+			else
+			{
+				mpz_sub_ui(col1,col1,1);
+				mpz_mod_ui(col1,col1,5);
+				mpz_sub_ui(col2,col2,1);
+				mpz_mod_ui(col2,col2,5);
+			}
 			ciphertext[i] = key_matrix[mpz_get_ui(row1)][mpz_get_ui(col1)];
-			ciphertext[i+1] = key_matrix[mpz_get_ui(row2)][mpz_get_ui(col2)];
+			ciphertext[i+1] = key_matrix[mpz_get_ui(row1)][mpz_get_ui(col2)];
 		}
 		else if(mpz_cmp(col1,col2)==0)
 		{
-			mpz_add_ui(row1,row1,1);
-			mpz_mod_ui(row1,row1,5);
-			mpz_add_ui(row2,row2,1);
-			mpz_mod_ui(row2,row2,5);
+			if(mpz_cmp(row1,row2)<0)
+			{
+				mpz_add_ui(row1,row1,1);
+				mpz_mod_ui(row1,row1,5);
+				mpz_add_ui(row2,row2,1);
+				mpz_mod_ui(row2,row2,5);
+			}
+			else
+			{
+				mpz_sub_ui(row1,row1,1);
+				mpz_mod_ui(row1,row1,5);
+				mpz_sub_ui(row2,row2,1);
+				mpz_mod_ui(row2,row2,5);
+			}
 			ciphertext[i] = key_matrix[mpz_get_ui(row1)][mpz_get_ui(col1)];
-			ciphertext[i+1] = key_matrix[mpz_get_ui(row2)][mpz_get_ui(col2)];
+			ciphertext[i+1] = key_matrix[mpz_get_ui(row2)][mpz_get_ui(col1)];
 		}
 		else
 		{
 			ciphertext[i] = key_matrix[mpz_get_ui(row1)][mpz_get_ui(col2)];
 			ciphertext[i+1] = key_matrix[mpz_get_ui(row2)][mpz_get_ui(col1)];
-		}
-
-		
-		
-		
+		}	
 		
 	}
-
+	printf("\n Plaintext = %s",plaintext);
 	ciphertext[strlen(plaintext)] = '\0';
 	
 	toUpper(ciphertext);
@@ -375,19 +395,39 @@ void decrypt(char *decoded,char*ciphertext,char* key)
 
 		if(mpz_cmp(row1,row2)==0)
 		{
-			mpz_sub_ui(col1,col1,1);
-			mpz_mod_ui(col1,col1,5);
-			mpz_sub_ui(col2,col2,1);
-			mpz_mod_ui(col2,col2,5);
+			if(mpz_cmp(col1,col2)<0)
+			{
+				mpz_sub_ui(col1,col1,1);
+				mpz_mod_ui(col1,col1,5);
+				mpz_sub_ui(col2,col2,1);
+				mpz_mod_ui(col2,col2,5);
+			}
+			else
+			{
+				mpz_add_ui(col1,col1,1);
+				mpz_mod_ui(col1,col1,5);
+				mpz_add_ui(col2,col2,1);
+				mpz_mod_ui(col2,col2,5);
+			}
 			decoded[i] = key_matrix[mpz_get_ui(row1)][mpz_get_ui(col1)];
 			decoded[i+1] = key_matrix[mpz_get_ui(row2)][mpz_get_ui(col2)];
 		}
 		else if(mpz_cmp(col1,col2)==0)
 		{
-			mpz_sub_ui(row1,row1,1);
-			mpz_mod_ui(row1,row1,5);
-			mpz_sub_ui(row2,row2,1);
-			mpz_mod_ui(row2,row2,5);
+			if(mpz_cmp(row1,row2)<0)
+			{
+				mpz_sub_ui(row1,row1,1);
+				mpz_mod_ui(row1,row1,5);
+				mpz_sub_ui(row2,row2,1);
+				mpz_mod_ui(row2,row2,5);
+			}
+			else
+			{
+				mpz_add_ui(row1,row1,1);
+				mpz_mod_ui(row1,row1,5);
+				mpz_add_ui(row2,row2,1);
+				mpz_mod_ui(row2,row2,5);
+			}
 			decoded[i] = key_matrix[mpz_get_ui(row1)][mpz_get_ui(col1)];
 			decoded[i+1] = key_matrix[mpz_get_ui(row2)][mpz_get_ui(col2)];
 		}
@@ -402,7 +442,7 @@ void decrypt(char *decoded,char*ciphertext,char* key)
 
 	
 
-	decoded[strlen(ciphertext)] = '\0';
+	decoded[strlen(ciphertext)+1] = '\0';
 	
 	toUpper(decoded);
 
@@ -434,12 +474,13 @@ void main(int argc,char *argv[])
 	FILE *file = fopen("output.txt","r");
 
 	fgets(trad_key,LENGTH_OF_KEY,file);
-	printf("   %s  ",trad_key);
+	fgetc(file);
+	printf("\nKey is : %s  ",trad_key);
 	k_roll1 = fgetc(file);
 	fgetc(file);
 	k_roll2 = fgetc(file);
 
-	printf("\n Key is  %c ",k_roll1);
+	//printf("\n Key is  %c ",k_roll1);
 	// The initialization is done
 	
 
@@ -468,5 +509,6 @@ void main(int argc,char *argv[])
 			
 		}
 	}
+	
 
 }

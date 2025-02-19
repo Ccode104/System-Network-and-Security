@@ -109,7 +109,7 @@ void init_mapping(char* key,mpz_t mapping[])
 	for(int i = 0; i< 37;i++)
 	{
 		hash(key[i],key_hash);
-		printf("\n%dKey = %c hash = %d",i,key[i],mpz_get_ui(key_hash));
+		//printf("\n%dKey = %c hash = %d",i,key[i],mpz_get_ui(key_hash));
 		mpz_set(mapping[i],key_hash);
 	}
 
@@ -142,7 +142,7 @@ void encrypt(char *plaintext,char*ciphertext,mpz_t mapping[])
 	int blocks = strlen(plaintext)/37 + 1;
 	int empty = ((blocks)*37) - strlen(plaintext);
 
-	printf("e=%d",empty);
+	//printf("e=%d",empty);
 	int alphanumeric[37];
 
 	for(int i = 0;i<37;i++)
@@ -184,23 +184,23 @@ void encrypt(char *plaintext,char*ciphertext,mpz_t mapping[])
 
 	
 	k=0;
-	printf("p=%s l=%d k=%d b=%d",plaintext,strlen(plaintext),k,blocks);
+	//printf("p=%s l=%d k=%d b=%d",plaintext,strlen(plaintext),k,blocks);
 	for(int i = 0;i<blocks;i++)
 	{
 		for(int j=0;j<37;j++)
 		{
 			ciphertext[mpz_get_ui(mapping[k])] = plaintext[k];
-			printf("\n%d-place=%d-%c",k,mpz_get_ui(mapping[k]),ciphertext[mpz_get_ui(mapping[k])]);
+	//		printf("\n%d-place=%d-%c",k,mpz_get_ui(mapping[k]),ciphertext[mpz_get_ui(mapping[k])]);
 			k++;
 		}
 	}
 	ciphertext[37] = '\0';
 	
-	printf("\n%d-cipher=%s",strlen(ciphertext),ciphertext);
+	//printf("\n%d-cipher=%s",strlen(ciphertext),ciphertext);
 	toUpper(ciphertext);
-	for(int i=0;ciphertext[i]!='\0';i++)
+	/*for(int i=0;ciphertext[i]!='\0';i++)
 		printf("\n%c",ciphertext[i]);
-
+*/
 }
 
 void sort(mpz_t arr[])
@@ -287,7 +287,7 @@ void main(int argc,char *argv[])
 	fgetc(file);
 	k_roll2 = fgetc(file);
 
-	printf("\n Key is  %s  --%d ",trad_key,strlen(trad_key));
+	printf("\n Key is  %s ",trad_key);
 	trad_key[37]='\0';
 	// The initialization is done
 	
@@ -301,9 +301,10 @@ void main(int argc,char *argv[])
 	}
 
 	init_mapping(trad_key,mapping);
-	for(int i=0;i<37;i++)
+	/*for(int i=0;i<37;i++)
 		printf("\n%d",mpz_get_ui(mapping[i]));
-	printf("\n Plaintext : %s",plaintext);
+	*/
+	//printf("\n Plaintext : %s",plaintext);
 	encrypt(plaintext,ciphertext,mapping);
 
 	printf("\n Plaintext : %s",plaintext);

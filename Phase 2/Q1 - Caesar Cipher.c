@@ -93,14 +93,15 @@ void encrypt(char *plaintext,char*ciphertext,char key)
 	hash(key,key_hash);
 
 	for(int i = 0; i < strlen(plaintext); i++)
-	{
+	{	
 		hash(plaintext[i],plaintext_hash);
-		
+
+		printf("\nPlaintext Char-Hash : %c-%d",plaintext[i],mpz_get_ui(plaintext_hash));
 		mpz_add(sum,plaintext_hash,key_hash);
 		mpz_mod_ui(sum,sum,37);
 		
 		ciphertext[i] = (char)(character(sum));
-		
+		printf("\nCiphertext Char-Hash is %c -> (%d + %d) mod 37 = %d",ciphertext[i],mpz_get_ui(plaintext_hash),mpz_get_ui(key_hash),mpz_get_ui(sum));
 	}
 
 	ciphertext[strlen(plaintext)] = '\0';
@@ -147,7 +148,7 @@ void main(int argc,char *argv[])
 	toLowerCase(plaintext);
 	
 
-	printf("\nReading keys from keys.txt ....");
+	printf("\nReading keys from output.txt ....");
 	char buffer[MAX_LENGTH];
 	char trad_key[LENGTH_OF_KEY];
 	char k_roll1;
@@ -158,16 +159,24 @@ void main(int argc,char *argv[])
 	fgets(trad_key,LENGTH_OF_KEY,file);
 
 	//printf("   %s  ",trad_key);
+	fgetc(file);
 	k_roll1 = fgetc(file);
 	fgetc(file);
 	k_roll2 = fgetc(file);
 
-	printf("\n Key is  %c ",k_roll1);
+	printf("\n Key is  %c \n",k_roll1);
 	// The initialization is done
 	
 	char ciphertext[MAX_LENGTH];
 	int length = strlen(plaintext);
 
+	mpz_t counter;
+	mpz_init(counter);
+	for(int i=0;i<37;i++)
+	{
+		printf(" %d-%c ",i,character(counter));
+		mpz_add_ui(counter,counter,1);
+	}
 
 	encrypt(plaintext,ciphertext,k_roll1);
 

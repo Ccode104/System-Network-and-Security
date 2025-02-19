@@ -176,13 +176,13 @@ void main(int argc,char *argv[])
 
 	fgets(trad_key,LENGTH_OF_KEY,file);
 
-	//printf("   %s  ",trad_key);
+	printf("\nKey is :  %s  ",trad_key);
 	fgetc(file);
 	k_roll1 = fgetc(file);
 	fgetc(file);
 	k_roll2 = fgetc(file);
 
-	printf("\n Key is  %c ",k_roll1);
+	//printf("\n Key is  %c ",k_roll1);
 	// The initialization is done
 	
 	char ciphertext[MAX_LENGTH];

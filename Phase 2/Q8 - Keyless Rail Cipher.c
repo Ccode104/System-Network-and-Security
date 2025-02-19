@@ -125,6 +125,7 @@ void encrypt(char *plaintext,char *ciphertext)
 	ciphertext[strlen(plaintext)] = '\0';
 	
 	toUpper(ciphertext);
+	/*
 	printf("\n");
 	for(int i=0;i<l1;i++)
 	{
@@ -135,6 +136,7 @@ void encrypt(char *plaintext,char *ciphertext)
 	{
 		printf("%c",zigzag[1][i]);
 	}
+	*/
 
 }
 
@@ -167,7 +169,7 @@ void decrypt(char *decoded,char*ciphertext)
 		zigzag[1][k] = ciphertext[i];
 		k++;
 	}
-
+/*
 	printf("\n");
 	for(int i=0;i<l1;i++)
 	{
@@ -178,7 +180,7 @@ void decrypt(char *decoded,char*ciphertext)
 	{
 		printf("%c",zigzag[1][i]);
 	}
-
+*/
 	k=0;
 	for(int i = 0; i < l2; i++)
 	{

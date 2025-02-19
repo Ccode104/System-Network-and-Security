@@ -116,10 +116,10 @@ void main(int argc, char *argv[])
 	}
 
 
-
+	printf("\nCharacters used till now : \n");
 	for (int i = 11; i < NO_OF_CHAR; ++i)
 	{
-		printf(" %d ",alphabet[i]);
+		printf("%c-%d ",(char)(i - 11 +'a'),alphabet[i]);
 	}
 	
 	if(length_of_key == 25)
@@ -150,6 +150,7 @@ void main(int argc, char *argv[])
 				// Distinct
 				// Consider
 
+				printf("\nCharacters used till now : \n");
 				for (int i = 11; i < NO_OF_CHAR; ++i)
 				{
 					printf(" %c-%d ",(char)(i - 11 +'a'), alphabet[i]);
@@ -166,7 +167,7 @@ void main(int argc, char *argv[])
 				
 				length_of_key++;
 
-				printf("\n%s %ld",key,length_of_key);
+				printf("\nCurrent key state : %s %ld\n",key,length_of_key);
 
 				
 				if(((length_of_key==25)&&(is_IandJ_distinct==0))||((length_of_key==26)&&(is_IandJ_distinct==1)))

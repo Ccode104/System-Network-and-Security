@@ -111,8 +111,7 @@ void init_mapping(char* key,mpz_t mapping[])
 		hash(key[i],key_hash);
 		mpz_set(mapping[i],key_hash);
 	}
-
-	// We get the the mapping : 
+ 
 }
 
 
@@ -147,17 +146,19 @@ void encrypt(char *plaintext,char*ciphertext,char *key)
 	}
 	
 	init_mapping(key,mapping);
-
+/*
 	for(int i=0;i<37;i++)
 		printf("%c",character(mapping[i]));
-
+*/
 	for(int i = 0; i < strlen(plaintext); i++)
 	{
 		rotor_mapping(plaintext[i],rotor_mapping_hash,mapping);
 		ciphertext[i] = (char)(character(rotor_mapping_hash));
 		shift_mapping(mapping,1);
+		/*
 		for(int i=0;i<37;i++)
 			printf("%c",character(mapping[i]));	
+			*/
 	}
 
 	ciphertext[strlen(plaintext)] = '\0';
@@ -220,12 +221,13 @@ void main(int argc,char *argv[])
 
 	fgets(trad_key,LENGTH_OF_KEY,file);
 
-	//printf("   %s  ",trad_key);
+	printf("\nKey is : %s  ",trad_key);
+	fgetc(file);
 	k_roll1 = fgetc(file);
 	fgetc(file);
 	k_roll2 = fgetc(file);
 
-	printf("\n Key is  %s ",trad_key);
+	//printf("\n Key is  %s ",trad_key);
 	// The initialization is done
 	
 	char ciphertext[MAX_LENGTH];

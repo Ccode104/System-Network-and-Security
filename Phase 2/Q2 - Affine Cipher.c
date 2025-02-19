@@ -97,10 +97,13 @@ void encrypt(char *plaintext,char*ciphertext,char key1,char key2)
 	{
 		hash(plaintext[i],plaintext_hash);
 		
+		printf("\nPlaintext Char-Hash : %c-%d",plaintext[i],mpz_get_ui(plaintext_hash));
+
 		mpz_mul(sum,plaintext_hash,key1_hash);
 		mpz_add(sum,plaintext_hash,key2_hash);
 		mpz_mod_ui(sum,sum,37);
 		
+		printf("\nCiphertext Char-Hash is %c -> (%d * %d + %d) mod 37 = %d",ciphertext[i],mpz_get_ui(plaintext_hash),mpz_get_ui(key1_hash),mpz_get_ui(key2_hash),mpz_get_ui(sum));
 		ciphertext[i] = (char)(character(sum));
 		
 	}
@@ -165,6 +168,7 @@ void main(int argc,char *argv[])
 	fgets(trad_key,LENGTH_OF_KEY,file);
 
 	//printf("   %s  ",trad_key);
+	fgetc(file);
 	k_roll1 = fgetc(file);
 	fgetc(file);
 	k_roll2 = fgetc(file);
